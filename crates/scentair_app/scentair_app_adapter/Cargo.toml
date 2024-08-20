@@ -1,0 +1,8 @@
+[package]
+name = "scentair_app_adapter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+scentair_app_usecase = { path = "../scentair_app_usecase" }
+sqlx = { workspace = true }

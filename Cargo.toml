@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/scentair_app/scentair_app_adapter",
+  "crates/scentair_app/scentair_app_backend",
+  "crates/scentair_app/scentair_app_usecase",
+]
+
+[workspace.dependencies]
+anyhow = "1.0.86"
+insta = "1.39.0"
+thiserror = "1.0.63"
+rocket = { version = "0.5.1", features = ["json", "uuid"] }
+serde = { version = "1.0.208", features = ["derive"] }
+sqlx = { version = "0.8.0", features = [
+  "runtime-tokio-rustls",
+  "macros",
+  "postgres",
+  "uuid",
+  "chrono",
+  "json",
+] }
+tokio = { version = "1.39.3", features = ["full"] }
