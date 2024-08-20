@@ -19,7 +19,7 @@ CREATE TABLE
     "user_id" UUID NOT NULL,
     "credential_id" UUID NOT NULL,
     "payload" JSONB NOT NULL,
-    "hash" VARCHAR(255) NOT NULL,
+    "hash" CHAR(64) NOT NULL GENERATED ALWAYS AS (encode (digest ("payload"::TEXT, 'SHA256'), 'HEX')) STORED,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expired_at" TIMESTAMP NOT NULL,
     PRIMARY KEY ("user_credential_id"),
