@@ -18,7 +18,8 @@ CREATE TABLE
     "user_credential_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "credential_id" UUID NOT NULL,
-    "external_id" VARCHAR(255) NOT NULL,
+    "payload" JSONB NOT NULL,
+    "hash" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expired_at" TIMESTAMP NOT NULL,
     PRIMARY KEY ("user_credential_id"),
@@ -26,4 +27,4 @@ CREATE TABLE
     FOREIGN KEY ("credential_id") REFERENCES "credential" ("credential_id")
   );
 
-CREATE UNIQUE INDEX "unique_019170af-cadc-7644-98de-fffdb2d4298b" ON "user_credential" ("external_id");
+CREATE INDEX "unique_019170dd-ae5a-7e28-a352-19b6a13e13bb" ON "user_credential" ("hash");
