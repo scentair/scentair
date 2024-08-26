@@ -1558,7 +1558,41 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f3cb5ba0dc43242ce17de99c180e96db90b235b8a9fdc9543c96d2209116bd9f"
 
 [[package]]
-name = "scentair_app_adapter"
+name = "scentair_admin_backend"
+version = "0.1.0"
+dependencies = [
+ "rocket",
+ "scentair_admin_infrastructure",
+ "scentair_admin_usecase",
+ "serde",
+ "tokio",
+]
+
+[[package]]
+name = "scentair_admin_infrastructure"
+version = "0.1.0"
+dependencies = [
+ "scentair_admin_usecase",
+ "sqlx",
+]
+
+[[package]]
+name = "scentair_admin_usecase"
+version = "0.1.0"
+
+[[package]]
+name = "scentair_app_backend"
+version = "0.1.0"
+dependencies = [
+ "rocket",
+ "scentair_app_infrastructure",
+ "scentair_app_usecase",
+ "serde",
+ "tokio",
+]
+
+[[package]]
+name = "scentair_app_infrastructure"
 version = "0.1.0"
 dependencies = [
  "scentair_app_usecase",
@@ -1566,18 +1600,76 @@ dependencies = [
 ]
 
 [[package]]
-name = "scentair_app_backend"
+name = "scentair_app_usecase"
+version = "0.1.0"
+
+[[package]]
+name = "scentair_console_backend"
 version = "0.1.0"
 dependencies = [
  "rocket",
- "scentair_app_adapter",
- "scentair_app_usecase",
+ "scentair_console_infrastructure",
+ "scentair_console_usecase",
  "serde",
  "tokio",
 ]
 
 [[package]]
-name = "scentair_app_usecase"
+name = "scentair_console_infrastructure"
+version = "0.1.0"
+dependencies = [
+ "scentair_console_usecase",
+ "sqlx",
+]
+
+[[package]]
+name = "scentair_console_usecase"
+version = "0.1.0"
+
+[[package]]
+name = "scentair_sdk_backend"
+version = "0.1.0"
+dependencies = [
+ "rocket",
+ "scentair_sdk_infrastructure",
+ "scentair_sdk_usecase",
+ "serde",
+ "tokio",
+]
+
+[[package]]
+name = "scentair_sdk_infrastructure"
+version = "0.1.0"
+dependencies = [
+ "scentair_sdk_usecase",
+ "sqlx",
+]
+
+[[package]]
+name = "scentair_sdk_usecase"
+version = "0.1.0"
+
+[[package]]
+name = "scentair_worker_backend"
+version = "0.1.0"
+dependencies = [
+ "rocket",
+ "scentair_worker_infrastructure",
+ "scentair_worker_usecase",
+ "serde",
+ "tokio",
+]
+
+[[package]]
+name = "scentair_worker_infrastructure"
+version = "0.1.0"
+dependencies = [
+ "scentair_worker_usecase",
+ "sqlx",
+]
+
+[[package]]
+name = "scentair_worker_usecase"
 version = "0.1.0"
 
 [[package]]

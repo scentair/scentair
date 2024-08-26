@@ -1,0 +1,11 @@
+[package]
+name = "scentair_worker_backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rocket = { workspace = true }
+scentair_worker_infrastructure = { path = "../scentair_worker_infrastructure" }
+scentair_worker_usecase = { path = "../scentair_worker_usecase" }
+serde = { workspace = true }
+tokio = { workspace = true }

@@ -1,9 +1,21 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/scentair_app/scentair_app_adapter",
+  "crates/scentair_admin/scentair_admin_backend",
+  "crates/scentair_admin/scentair_admin_infrastructure",
+  "crates/scentair_admin/scentair_admin_usecase",
   "crates/scentair_app/scentair_app_backend",
+  "crates/scentair_app/scentair_app_infrastructure",
   "crates/scentair_app/scentair_app_usecase",
+  "crates/scentair_console/scentair_console_backend",
+  "crates/scentair_console/scentair_console_infrastructure",
+  "crates/scentair_console/scentair_console_usecase",
+  "crates/scentair_sdk/scentair_sdk_backend",
+  "crates/scentair_sdk/scentair_sdk_infrastructure",
+  "crates/scentair_sdk/scentair_sdk_usecase",
+  "crates/scentair_worker/scentair_worker_backend",
+  "crates/scentair_worker/scentair_worker_infrastructure",
+  "crates/scentair_worker/scentair_worker_usecase",
 ]
 
 [workspace.dependencies]

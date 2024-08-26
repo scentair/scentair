@@ -1,0 +1,8 @@
+[package]
+name = "scentair_worker_infrastructure"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+scentair_worker_usecase = { path = "../scentair_worker_usecase" }
+sqlx = { workspace = true }

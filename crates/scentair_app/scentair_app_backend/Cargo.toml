@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 rocket = { workspace = true }
-scentair_app_adapter = { path = "../scentair_app_adapter" }
+scentair_app_infrastructure = { path = "../scentair_app_infrastructure" }
 scentair_app_usecase = { path = "../scentair_app_usecase" }
 serde = { workspace = true }
 tokio = { workspace = true }
