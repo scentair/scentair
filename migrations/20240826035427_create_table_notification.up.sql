@@ -25,6 +25,8 @@ CREATE TABLE
     "token" VARCHAR(128) NOT NULL,
     "config" JSONB NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "accepted_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "revoked_at" TIMESTAMP NOT NULL DEFAULT '2199-12-31 23:59:59',
     PRIMARY KEY ("user_device_id"),
     FOREIGN KEY ("user_id") REFERENCES "user" ("user_id"),
     FOREIGN KEY ("device_id") REFERENCES "device" ("device_id")
@@ -82,6 +84,7 @@ CREATE TABLE
     "user_notification_id" UUID NOT NULL,
     "user_device_id" UUID NOT NULL,
     "notification_id" UUID NOT NULL,
+    "sent_by" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "notification_template_id" UUID NOT NULL,
     "title" VARCHAR(128) NOT NULL,
@@ -90,6 +93,7 @@ CREATE TABLE
     PRIMARY KEY ("user_notification_id"),
     FOREIGN KEY ("user_device_id") REFERENCES "user_device" ("user_device_id"),
     FOREIGN KEY ("notification_id") REFERENCES "notification" ("notification_id"),
+    FOREIGN KEY ("sent_by") REFERENCES "member" ("member_id"),
     FOREIGN KEY ("user_id") REFERENCES "user" ("user_id"),
     FOREIGN KEY ("notification_template_id") REFERENCES "notification_template" ("notification_template_id")
   );

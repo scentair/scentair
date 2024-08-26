@@ -76,7 +76,7 @@ CREATE TABLE
     "interval" INTERVAL NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "accepted_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "revoked_at" TIMESTAMP NOT NULL,
+    "revoked_at" TIMESTAMP NOT NULL DEFAULT '2199-12-31 23:59:59',
     "expired_at" TIMESTAMP NOT NULL GENERATED ALWAYS AS (accepted_at + interval) STORED,
     PRIMARY KEY ("user_term_id"),
     FOREIGN KEY ("user_id") REFERENCES "user" ("user_id"),
