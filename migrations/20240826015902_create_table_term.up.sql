@@ -66,7 +66,7 @@ CREATE TABLE
     FOREIGN KEY ("language_id") REFERENCES "language" ("language_id")
   );
 
-CREATE INDEX "index_01918d12-fbb2-790d-be24-7e64cf53b69c" ON "term_content" ("term_id", "language_id", "version");
+CREATE UNIQUE INDEX "unique_01918d12-fbb2-790d-be24-7e64cf53b69c" ON "term_content" ("term_id", "language_id", "version");
 
 CREATE TABLE
   "user_term" (
