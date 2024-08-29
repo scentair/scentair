@@ -1,18 +1,29 @@
 CREATE TABLE
   "credential" (
     "credential_id" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("credential_id")
   );
 
+CREATE UNIQUE INDEX "unique_01919692-cda8-7741-a2a5-d8d35b5ece60" ON "credential" ("key");
+
 CREATE UNIQUE INDEX "unique_019170ae-24cd-7024-b4ca-7a5e2ae8541f" ON "credential" ("name");
 
 INSERT INTO
-  "credential" ("credential_id", "name")
+  "credential" ("credential_id", "key", "name")
 VALUES
-  ('019170b0-609a-79fe-9314-044d14863643', 'LOCAL'),
-  ('01918d67-5721-7c47-b66e-39be161e6322', 'OTP');
+  (
+    '019170b0-609a-79fe-9314-044d14863643',
+    'system::local',
+    'Local'
+  ),
+  (
+    '01918d67-5721-7c47-b66e-39be161e6322',
+    'system::otp',
+    'OTP'
+  );
 
 CREATE TABLE
   "user_credential" (

@@ -28,6 +28,7 @@ VALUES
 CREATE TABLE
   "term" (
     "term_id" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("term_id")
@@ -35,20 +36,25 @@ CREATE TABLE
 
 CREATE UNIQUE INDEX "unique_01918c4d-74c1-7371-8f98-d23c3dfead41" ON "term" ("name");
 
+CREATE UNIQUE INDEX "unique_01919688-79bc-7bdb-8b00-c6d236397a29" ON "term" ("key");
+
 INSERT INTO
-  "term" ("term_id", "name")
+  "term" ("term_id", "key", "name")
 VALUES
   (
     '01918cf9-86eb-7769-8aaf-eef6f5b0015a',
-    'TERMS_OF_SERVICE'
+    'system::terms_of_service',
+    'Terms Of Service'
   ),
   (
     '01918cf9-9854-7a5e-b990-ce0ff48c14eb',
-    'PRIVACY_POLICY'
+    'system::privacy_policy',
+    'Privacy Policy'
   ),
   (
     '01918cf9-b19a-7e0b-a266-879b86cd86f0',
-    'MARKETING_CONSENT'
+    'system::marketing_consent',
+    'Marketing Consent'
   );
 
 CREATE TABLE

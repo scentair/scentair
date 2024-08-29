@@ -3,12 +3,16 @@ CREATE TABLE
     "role_id" UUID NOT NULL,
     "organization_id" UUID NOT NULL,
     "created_by" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
+    "description" TEXT,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("role_id"),
     FOREIGN KEY ("organization_id") REFERENCES "organization" ("organization_id"),
     FOREIGN KEY ("created_by") REFERENCES "member" ("member_id")
   );
+
+CREATE UNIQUE INDEX "unique_01919486-9431-7068-ae2f-4c15ae9349f1" ON "role" ("organization_id", "key");
 
 CREATE UNIQUE INDEX "unique_019172c2-9ba3-71fa-9550-c142b2799c93" ON "role" ("organization_id", "name");
 
@@ -17,12 +21,16 @@ CREATE TABLE
     "permission_id" UUID NOT NULL,
     "organization_id" UUID NOT NULL,
     "created_by" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
+    "description" TEXT,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("permission_id"),
     FOREIGN KEY ("organization_id") REFERENCES "organization" ("organization_id"),
     FOREIGN KEY ("created_by") REFERENCES "member" ("member_id")
   );
+
+CREATE UNIQUE INDEX "unique_01919486-e25c-7536-a1b1-db6397ff2b80" ON "permission" ("organization_id", "key");
 
 CREATE UNIQUE INDEX "uniuqe_019172c2-b957-7069-85c1-d2fb637f2648" ON "permission" ("organization_id", "name");
 

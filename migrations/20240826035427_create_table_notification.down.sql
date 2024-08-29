@@ -11,3 +11,5 @@ DROP TABLE "notification";
 DROP TABLE "user_device";
 
 DROP TABLE "device";
+
+DROP TABLE "channel";

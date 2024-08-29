@@ -1,19 +1,23 @@
 CREATE TABLE
   "verification" (
     "verification_id" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("verification_id")
   );
 
+CREATE UNIQUE INDEX "unique_01919694-76f1-79fd-9888-05ca3b6507d0" ON "verification" ("key");
+
 CREATE UNIQUE INDEX "unique_019170c9-7a73-707c-9fe5-8fb7b1654fa7" ON "verification" ("name");
 
 INSERT INTO
-  "verification" ("verification_id", "name")
+  "verification" ("verification_id", "key", "name")
 VALUES
   (
     '019170cb-2286-71b4-9404-8442808614d8',
-    'SIGNUP_EMAIL'
+    'system::email::verified',
+    'Email Verified'
   );
 
 CREATE TABLE

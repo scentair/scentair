@@ -1,6 +1,39 @@
 CREATE TABLE
+  "channel" (
+    "channel_id" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
+    "name" VARCHAR(32) NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("channel_id")
+  );
+
+CREATE UNIQUE INDEX "unique_0191968a-86eb-7a44-ac9c-99c7aba57c31" ON "channel" ("name");
+
+CREATE UNIQUE INDEX "unique_0191968a-94af-708b-8201-df2aaaba314f" ON "channel" ("key");
+
+INSERT INTO
+  "channel" ("channel_id", "key", "name")
+VALUES
+  (
+    '0191968a-86eb-7a44-ac9c-99c7aba57c31',
+    'system::email',
+    'Email'
+  ),
+  (
+    '0191968a-94af-708b-8201-df2aaaba314f',
+    'system::sms',
+    'SMS'
+  ),
+  (
+    '0191968a-9b1e-7b5e-8b9b-8f2aaaba314f',
+    'system::push',
+    'Push'
+  );
+
+CREATE TABLE
   "device" (
     "device_id" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("device_id")
@@ -8,21 +41,29 @@ CREATE TABLE
 
 CREATE UNIQUE INDEX "unique_01918cdc-77f0-7622-8ed0-b5833d0e5e1d" ON "device" ("name");
 
+CREATE UNIQUE INDEX "unique_0191968a-67f7-7b5e-bf24-c8136fe1dbdb" ON "device" ("key");
+
 INSERT INTO
-  "device" ("device_id", "name")
+  "device" ("device_id", "key", "name")
 VALUES
-  ('01918ce4-f165-752d-ac6d-38c32d4e6129', 'EMAIL'),
-  ('01918ce5-40d4-7f27-8f78-b26e0783a589', 'SMS'),
-  ('01918ce4-8441-73ab-aa4b-032655f8c595', 'ANDROID'),
-  ('01918ce4-b9bc-76b1-b5bb-da38efbcf198', 'IOS');
+  (
+    '01918ce4-8441-73ab-aa4b-032655f8c595',
+    'system::android',
+    'Android'
+  ),
+  (
+    '01918ce4-b9bc-76b1-b5bb-da38efbcf198',
+    'system::ios',
+    'iOS'
+  );
 
 CREATE TABLE
   "user_device" (
     "user_device_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "device_id" UUID NOT NULL,
-    "key" VARCHAR(128) NOT NULL,
-    "token" VARCHAR(128) NOT NULL,
+    "device_key" VARCHAR(128) NOT NULL,
+    "device_token" VARCHAR(128) NOT NULL,
     "config" JSONB NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "accepted_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -34,22 +75,22 @@ CREATE TABLE
 
 CREATE INDEX "index_01918cdc-fcb9-7447-9358-644667d6e463" ON "user_device" ("user_id", "device_id");
 
-CREATE UNIQUE INDEX "unique_01918ce0-1715-7909-8710-ad9d6f2328f5" ON "user_device" ("key");
+CREATE UNIQUE INDEX "unique_01918ce0-1715-7909-8710-ad9d6f2328f5" ON "user_device" ("device_key");
 
 CREATE TABLE
   "notification" (
     "notification_id" UUID NOT NULL,
+    "channel_id" UUID NOT NULL,
+    "key" VARCHAR(32) NOT NULL,
     "name" VARCHAR(32) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY ("notification_id")
+    PRIMARY KEY ("notification_id"),
+    FOREIGN KEY ("channel_id") REFERENCES "channel" ("channel_id")
   );
 
-CREATE UNIQUE INDEX "unique_01918cd4-5c73-73c2-ace4-592e1925e101" ON "notification" ("name");
+CREATE UNIQUE INDEX "unique_0191968f-e4af-7194-83c7-d38199f23242" ON "notification" ("key");
 
-INSERT INTO
-  "notification" ("notification_id", "name")
-VALUES
-  ('01918cd5-8eb4-7a78-8e31-3ec8efcd8cc7', 'FCM');
+CREATE UNIQUE INDEX "unique_01918cd4-5c73-73c2-ace4-592e1925e101" ON "notification" ("name");
 
 CREATE TABLE
   "notification_template" (
