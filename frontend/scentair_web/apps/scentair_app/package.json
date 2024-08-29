@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "scentair_app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -20,7 +20,7 @@
     "@repo/eslint-config": "*",
     "@repo/tailwind-config": "*",
     "@repo/typescript-config": "*",
-    "@types/node": "^20.11.24",
+    "@types/node": "^22.5.0",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.18",
