@@ -16,6 +16,7 @@ pub struct Password {
 
 #[derive(Debug)]
 pub enum HashKind {
+    Fake,
     Argon2,
 }
 
@@ -33,7 +34,7 @@ impl Password {
     pub fn fake() -> Self {
         Self {
             hash: "fake".to_owned(),
-            kind: HashKind::Argon2,
+            kind: HashKind::Fake,
         }
     }
 }
@@ -54,8 +55,9 @@ impl Password {
         Ok(Self { hash: source, kind })
     }
 
-    pub fn verify(&self, plain: &str, hash: &str) -> Result<(), PasswordError> {
+    pub fn verify(&self, plain: &str) -> Result<(), PasswordError> {
         match self.kind {
+            HashKind::Fake => (),
             HashKind::Argon2 => argon2::Argon2::verify(plain, &self.hash)?,
         }
 

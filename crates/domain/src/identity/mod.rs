@@ -10,8 +10,10 @@ crate::new_ordered_identity!(UserCredentialId, "user_credential_");
 crate::new_ordered_identity!(UserCredentialPasswordId, "user_credential_password_");
 crate::new_ordered_identity!(VerificationId, "verification_");
 crate::new_ordered_identity!(UserVerificationId, "user_verification_");
+crate::new_ordered_identity!(SessionId, "session_");
 
 crate::new_unordered_identity!(VerificationToken, "verification_token_");
+crate::new_unordered_identity!(SessionToken, "session_token_");
 
 impl CredentialId {
     pub const LOCAL: Self = Self::from_u128(0x019170b0_609a_79fe_9314_044d14863643);
