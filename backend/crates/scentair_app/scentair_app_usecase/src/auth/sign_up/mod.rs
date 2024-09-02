@@ -66,6 +66,7 @@ impl<User: UserRepository, Email: EmailRepository> UseCase for Service<User, Ema
         if self.user.exists_by_email_address(&email_address).await {
             return Err(UseCaseError::AlreadyTaken);
         }
+
         let user_id = self.user.create(&password).await?;
         let verification_token = self.user.add_verification(user_id).await?;
         self.email.send(email_address, &verification_token).await?;
