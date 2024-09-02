@@ -30,8 +30,7 @@ CREATE TABLE
     "user_credential_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "credential_id" UUID NOT NULL,
-    "payload" JSONB NOT NULL,
-    "hash" CHAR(64) NOT NULL GENERATED ALWAYS AS (encode (digest ("payload"::TEXT, 'SHA256'), 'HEX')) STORED,
+    "value" VARCHAR(64) NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expired_at" TIMESTAMP NOT NULL,
     PRIMARY KEY ("user_credential_id"),
@@ -39,4 +38,4 @@ CREATE TABLE
     FOREIGN KEY ("credential_id") REFERENCES "credential" ("credential_id")
   );
 
-CREATE INDEX "unique_019170dd-ae5a-7e28-a352-19b6a13e13bb" ON "user_credential" ("hash");
+CREATE INDEX "index_019170dd-ae5a-7e28-a352-19b6a13e13bb" ON "user_credential" ("value");

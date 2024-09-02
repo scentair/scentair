@@ -4,3 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+crypto = { path = "../../../../crates/crypto" }
+domain = { path = "../../../../crates/domain" }
+tokio = { workspace = true }

@@ -16,7 +16,7 @@ INSERT INTO
 VALUES
   (
     '019170cb-2286-71b4-9404-8442808614d8',
-    'system::email::verified',
+    'system::email_verified',
     'Email Verified'
   );
 
