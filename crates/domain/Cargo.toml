@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 anyhow = { workspace = true }
 email_address = "0.2.9"
+thiserror = { workspace = true }
 uuid = { version = "1.10.0", features = ["v4", "v7"] }

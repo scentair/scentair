@@ -22,7 +22,7 @@ pub enum HashKind {
 #[derive(Debug, Error)]
 pub enum PasswordError {
     #[error("Password does not meet the pattern requirements")]
-    InvalidPasswordPattern,
+    InvalidPattern,
     #[error("Unknown hash kind")]
     UnknownHashKind,
     #[error("{0}")]
@@ -72,7 +72,7 @@ impl std::fmt::Display for Password {
 fn validate(password: &str) -> Result<(), PasswordError> {
     macro_rules! invalid {
         () => {
-            return Err(PasswordError::InvalidPasswordPattern)
+            return Err(PasswordError::InvalidPattern)
         };
     }
 

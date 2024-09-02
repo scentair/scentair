@@ -433,6 +433,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "email_address",
+ "thiserror",
  "uuid",
 ]
 

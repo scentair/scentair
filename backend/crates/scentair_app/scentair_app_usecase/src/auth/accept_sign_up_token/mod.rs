@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests;
 
-use domain::{UserVerificationId, VerificationToken};
+use domain::{EmailAddress, UserName, UserVerificationId, VerificationToken};
 
 #[async_trait]
 pub trait UseCase {
@@ -23,6 +23,20 @@ pub trait UserRepository: Sync {
     ) -> Result<(), UseCaseError> {
         std::unimplemented!()
     }
+
+    async fn find_by_user_verification_id(
+        &self,
+        user_verification_id: UserVerificationId,
+    ) -> Result<UserEntity, UseCaseError> {
+        std::unimplemented!()
+    }
+}
+
+#[async_trait]
+pub trait EmailRepository: Sync {
+    async fn send(&self, to: &EmailAddress, name: &UserName) -> Result<(), UseCaseError> {
+        std::unimplemented!()
+    }
 }
 
 #[derive(Debug)]
@@ -31,21 +45,33 @@ pub enum UseCaseError {
     Internal(anyhow::Error),
 }
 
-pub struct Service<User: UserRepository> {
-    user: User,
+pub struct UserEntity {
+    pub name: UserName,
+    pub email_address: EmailAddress,
 }
 
-impl<User: UserRepository> Service<User> {
-    pub const fn new(user: User) -> Self {
-        Self { user }
+pub struct Service<User: UserRepository, Email: EmailRepository> {
+    user: User,
+    email: Email,
+}
+
+impl<User: UserRepository, Email: EmailRepository> Service<User, Email> {
+    pub const fn new(user: User, email: Email) -> Self {
+        Self { user, email }
     }
 }
 
 #[async_trait]
-impl<User: UserRepository> UseCase for Service<User> {
+impl<User: UserRepository, Email: EmailRepository> UseCase for Service<User, Email> {
     async fn accept_sign_up_token(&self, token: VerificationToken) -> Result<(), UseCaseError> {
         let user_verification_id = self.user.find_by_verification_token(&token).await?;
         self.user.verify_sign_up_token(user_verification_id).await?;
+
+        let user = self
+            .user
+            .find_by_user_verification_id(user_verification_id)
+            .await?;
+        self.email.send(&user.email_address, &user.name).await?;
 
         Ok(())
     }

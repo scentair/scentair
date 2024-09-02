@@ -11,7 +11,11 @@ async fn succeed() {
             false
         }
 
-        async fn create(&self, _password: &Password) -> Result<UserId, UseCaseError> {
+        async fn create(
+            &self,
+            _password: &Password,
+            _name: &UserName,
+        ) -> Result<UserId, UseCaseError> {
             Ok(UserId::new())
         }
 
@@ -38,7 +42,7 @@ async fn succeed() {
     let email = EmailAdapter;
     let service = Service::new(user, email);
     let output = service
-        .sign_up(EmailAddress::fake(), Password::fake())
+        .sign_up(EmailAddress::fake(), Password::fake(), UserName::fake())
         .await;
 
     assert!(matches!(output, Ok(())));
@@ -65,7 +69,7 @@ async fn already_taken() {
     let email = EmailAdapter;
     let service = Service::new(user, email);
     let output = service
-        .sign_up(EmailAddress::fake(), Password::fake())
+        .sign_up(EmailAddress::fake(), Password::fake(), UserName::fake())
         .await;
 
     assert!(matches!(output, Err(UseCaseError::AlreadyTaken)));

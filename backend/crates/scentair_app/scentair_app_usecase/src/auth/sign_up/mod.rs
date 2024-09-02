@@ -2,7 +2,7 @@
 mod tests;
 
 use crypto::Password;
-use domain::{EmailAddress, UserCredentialId, UserId, VerificationToken};
+use domain::{EmailAddress, UserCredentialId, UserId, UserName, VerificationToken};
 
 #[async_trait]
 pub trait UseCase {
@@ -10,6 +10,7 @@ pub trait UseCase {
         &self,
         email_address: EmailAddress,
         password: Password,
+        name: UserName,
     ) -> Result<(), UseCaseError>;
 }
 
@@ -19,7 +20,7 @@ pub trait UserRepository: Sync {
         std::unimplemented!();
     }
 
-    async fn create(&self, password: &Password) -> Result<UserId, UseCaseError> {
+    async fn create(&self, password: &Password, name: &UserName) -> Result<UserId, UseCaseError> {
         std::unimplemented!();
     }
 
@@ -62,12 +63,13 @@ impl<User: UserRepository, Email: EmailRepository> UseCase for Service<User, Ema
         &self,
         email_address: EmailAddress,
         password: Password,
+        name: UserName,
     ) -> Result<(), UseCaseError> {
         if self.user.exists_by_email_address(&email_address).await {
             return Err(UseCaseError::AlreadyTaken);
         }
 
-        let user_id = self.user.create(&password).await?;
+        let user_id = self.user.create(&password, &name).await?;
         let verification_token = self.user.add_verification(user_id).await?;
         self.email.send(email_address, &verification_token).await?;
 
