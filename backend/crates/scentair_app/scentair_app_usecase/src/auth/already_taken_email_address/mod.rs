@@ -13,13 +13,18 @@ pub trait UseCase {
 
 #[async_trait]
 pub trait UserRepository: Sync {
-    async fn exists_by_email_address(&self, email_address: &EmailAddress) -> bool;
+    async fn exists_by_email_address(
+        &self,
+        email_address: &EmailAddress,
+    ) -> Result<bool, UseCaseError>;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum UseCaseError {
+    #[error("The email address is already taken")]
     AlreadyTaken,
-    Internal(anyhow::Error),
+    #[error("Internal error")]
+    Internal(#[from] anyhow::Error),
 }
 
 pub struct Service<User: UserRepository> {
@@ -38,7 +43,7 @@ impl<User: UserRepository> UseCase for Service<User> {
         &self,
         email_address: EmailAddress,
     ) -> Result<(), UseCaseError> {
-        if self.user.exists_by_email_address(&email_address).await {
+        if self.user.exists_by_email_address(&email_address).await? {
             return Err(UseCaseError::AlreadyTaken);
         }
 

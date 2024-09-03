@@ -366,6 +366,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "sqlx",
+ "thiserror",
 ]
 
 [[package]]
@@ -1679,9 +1680,14 @@ dependencies = [
 name = "scentair_app_infrastructure"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "assert_matches",
+ "async-trait",
+ "database",
  "domain",
  "scentair_app_usecase",
  "sqlx",
+ "tokio",
 ]
 
 [[package]]
@@ -1693,6 +1699,7 @@ dependencies = [
  "async-trait",
  "crypto",
  "domain",
+ "thiserror",
  "tokio",
 ]
 

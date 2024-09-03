@@ -6,8 +6,11 @@ async fn succeed() {
 
     #[async_trait]
     impl UserRepository for UserAdapter {
-        async fn exists_by_email_address(&self, _email_address: &EmailAddress) -> bool {
-            false
+        async fn exists_by_email_address(
+            &self,
+            _email_address: &EmailAddress,
+        ) -> Result<bool, UseCaseError> {
+            Ok(false)
         }
     }
 
@@ -26,8 +29,11 @@ async fn already_taken() {
 
     #[async_trait]
     impl UserRepository for UserAdapter {
-        async fn exists_by_email_address(&self, _email_address: &EmailAddress) -> bool {
-            true
+        async fn exists_by_email_address(
+            &self,
+            _email_address: &EmailAddress,
+        ) -> Result<bool, UseCaseError> {
+            Ok(true)
         }
     }
 

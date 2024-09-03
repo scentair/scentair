@@ -39,10 +39,12 @@ pub trait EmailRepository: Sync {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum UseCaseError {
+    #[error("Invalid token")]
     InvalidToken,
-    Internal(anyhow::Error),
+    #[error("Internal error")]
+    Internal(#[from] anyhow::Error),
 }
 
 pub struct UserEntity {

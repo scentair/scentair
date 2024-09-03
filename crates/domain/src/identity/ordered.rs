@@ -9,8 +9,23 @@ impl OrderedIdentity {
     }
 
     #[inline]
+    pub const fn from_u128(value: u128) -> Self {
+        Self(value)
+    }
+
+    #[inline]
+    pub const fn from_uuid(uuid: uuid::Uuid) -> Self {
+        Self(uuid.as_u128())
+    }
+
+    #[inline]
     pub const fn as_u128(self) -> u128 {
         self.0
+    }
+
+    #[inline]
+    pub const fn as_uuid(self) -> uuid::Uuid {
+        uuid::Uuid::from_u128(self.as_u128())
     }
 }
 
@@ -38,8 +53,18 @@ macro_rules! new_ordered_identity {
             }
 
             #[inline]
+            pub const fn from_uuid(uuid: uuid::Uuid) -> Self {
+                Self(crate::OrderedIdentity::from_uuid(uuid))
+            }
+
+            #[inline]
             pub const fn as_u128(self) -> u128 {
                 self.0.as_u128()
+            }
+
+            #[inline]
+            pub const fn as_uuid(self) -> uuid::Uuid {
+                self.0.as_uuid()
             }
         }
 

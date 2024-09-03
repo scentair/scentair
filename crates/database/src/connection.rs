@@ -16,6 +16,15 @@ pub trait Transaction {
     async fn rollback(connection: Self::Transaction) -> Result<(), Error>;
 }
 
+#[derive(Debug, Error)]
 pub enum Error {
+    #[error("Internal error")]
     Internal(anyhow::Error),
+}
+
+impl Error {
+    #[inline]
+    pub fn internal<E: Into<anyhow::Error>>(error: E) -> Self {
+        Self::Internal(error.into())
+    }
 }
