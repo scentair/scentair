@@ -42,7 +42,7 @@ async fn succeed() {
         .sign_in(EmailAddress::fake(), "password".to_owned())
         .await;
 
-    assert!(matches!(output, Ok(_)));
+    assert_matches!(output, Ok(_));
 }
 
 #[tokio::test]
@@ -79,5 +79,5 @@ async fn unknown_email_address() {
         .sign_in(EmailAddress::fake(), "password".to_owned())
         .await;
 
-    assert!(matches!(output, Err(UseCaseError::InvalidUser)));
+    assert_matches!(output, Err(UseCaseError::InvalidUser));
 }

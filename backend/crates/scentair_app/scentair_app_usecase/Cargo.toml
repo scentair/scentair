@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = { workspace = true }
+assert_matches = { workspace = true }
 async-trait = { workspace = true }
 crypto = { path = "../../../../crates/crypto" }
 domain = { path = "../../../../crates/domain" }

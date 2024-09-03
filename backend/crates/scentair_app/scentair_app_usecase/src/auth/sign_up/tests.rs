@@ -45,7 +45,7 @@ async fn succeed() {
         .sign_up(EmailAddress::fake(), Password::fake(), UserName::fake())
         .await;
 
-    assert!(matches!(output, Ok(())));
+    assert_matches!(output, Ok(()));
 }
 
 #[tokio::test]
@@ -72,5 +72,5 @@ async fn already_taken() {
         .sign_up(EmailAddress::fake(), Password::fake(), UserName::fake())
         .await;
 
-    assert!(matches!(output, Err(UseCaseError::AlreadyTaken)));
+    assert_matches!(output, Err(UseCaseError::AlreadyTaken));
 }

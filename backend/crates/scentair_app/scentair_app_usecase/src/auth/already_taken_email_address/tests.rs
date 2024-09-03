@@ -37,5 +37,5 @@ async fn already_taken() {
         .already_taken_email_address(EmailAddress::fake())
         .await;
 
-    assert!(matches!(output, Err(UseCaseError::AlreadyTaken)));
+    assert_matches!(output, Err(UseCaseError::AlreadyTaken));
 }

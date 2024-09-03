@@ -72,5 +72,5 @@ async fn invalid_token() {
     let service = Service::new(user, email);
     let output = service.accept_sign_up_token(VerificationToken::new()).await;
 
-    assert!(matches!(output, Err(UseCaseError::InvalidToken)));
+    assert_matches!(output, Err(UseCaseError::InvalidToken));
 }
