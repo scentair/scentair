@@ -9,6 +9,7 @@ async fn succeed() {
         async fn exists_by_email_address(
             &self,
             _email_address: &EmailAddress,
+            _now: chrono::NaiveDateTime,
         ) -> Result<bool, UseCaseError> {
             Ok(false)
         }
@@ -17,7 +18,7 @@ async fn succeed() {
     let user = UserAdapter;
     let service = Service::new(user);
     let output = service
-        .already_taken_email_address(EmailAddress::fake())
+        .already_taken_email_address(EmailAddress::fake(), chrono::Utc::now().naive_utc())
         .await;
 
     assert!(output.is_ok());
@@ -32,6 +33,7 @@ async fn already_taken() {
         async fn exists_by_email_address(
             &self,
             _email_address: &EmailAddress,
+            _now: chrono::NaiveDateTime,
         ) -> Result<bool, UseCaseError> {
             Ok(true)
         }
@@ -40,7 +42,7 @@ async fn already_taken() {
     let user = UserAdapter;
     let service = Service::new(user);
     let output = service
-        .already_taken_email_address(EmailAddress::fake())
+        .already_taken_email_address(EmailAddress::fake(), chrono::Utc::now().naive_utc())
         .await;
 
     assert_matches!(output, Err(UseCaseError::AlreadyTaken));

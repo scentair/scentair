@@ -1,5 +1,5 @@
 #[async_trait]
-pub trait Connection {
+pub trait Connection: Sync {
     type Connection;
 
     async fn connect(&self) -> Result<Self::Connection, Error>;

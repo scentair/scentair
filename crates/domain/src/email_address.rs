@@ -13,6 +13,12 @@ impl EmailAddress {
         Self("fake@email.io".to_owned())
     }
 
+    pub fn random() -> Self {
+        use fake::Fake;
+
+        Self(fake::faker::internet::en::SafeEmail().fake())
+    }
+
     #[inline]
     pub fn as_str(&self) -> &str {
         self.0.as_str()

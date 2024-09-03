@@ -8,6 +8,7 @@ pub trait UseCase {
     async fn already_taken_email_address(
         &self,
         email_address: EmailAddress,
+        now: chrono::NaiveDateTime,
     ) -> Result<(), UseCaseError>;
 }
 
@@ -16,6 +17,7 @@ pub trait UserRepository: Sync {
     async fn exists_by_email_address(
         &self,
         email_address: &EmailAddress,
+        now: chrono::NaiveDateTime,
     ) -> Result<bool, UseCaseError>;
 }
 
@@ -42,8 +44,13 @@ impl<User: UserRepository> UseCase for Service<User> {
     async fn already_taken_email_address(
         &self,
         email_address: EmailAddress,
+        now: chrono::NaiveDateTime,
     ) -> Result<(), UseCaseError> {
-        if self.user.exists_by_email_address(&email_address).await? {
+        if self
+            .user
+            .exists_by_email_address(&email_address, now)
+            .await?
+        {
             return Err(UseCaseError::AlreadyTaken);
         }
 

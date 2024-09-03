@@ -11,6 +11,13 @@ impl AsRef<sqlx::PgPool> for PostgresPool {
     }
 }
 
+impl AsRef<PostgresPool> for TestPostgresPool {
+    #[inline]
+    fn as_ref(&self) -> &PostgresPool {
+        &self.0
+    }
+}
+
 impl AsRef<sqlx::PgPool> for TestPostgresPool {
     #[inline]
     fn as_ref(&self) -> &sqlx::PgPool {
