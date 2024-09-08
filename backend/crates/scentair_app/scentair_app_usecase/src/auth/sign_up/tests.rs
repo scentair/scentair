@@ -3,18 +3,23 @@ use super::*;
 #[tokio::test]
 async fn succeed() {
     struct UserAdapter;
-    struct EmailAdapter;
+    struct EventAdapter;
 
     #[async_trait]
     impl UserRepository for UserAdapter {
-        async fn exists_by_email_address(&self, _email_address: &EmailAddress) -> bool {
-            false
+        async fn exists_by_email_address(
+            &self,
+            _email_address: &EmailAddress,
+            _now: chrono::NaiveDateTime,
+        ) -> Result<bool, UseCaseError> {
+            Ok(false)
         }
 
         async fn create(
             &self,
             _password: &Password,
             _name: &UserName,
+            _now: chrono::NaiveDateTime,
         ) -> Result<UserId, UseCaseError> {
             Ok(UserId::new())
         }
@@ -28,7 +33,7 @@ async fn succeed() {
     }
 
     #[async_trait]
-    impl EmailRepository for EmailAdapter {
+    impl EventRepository for EventAdapter {
         async fn send(
             &self,
             _to: EmailAddress,
@@ -39,10 +44,15 @@ async fn succeed() {
     }
 
     let user = UserAdapter;
-    let email = EmailAdapter;
-    let service = Service::new(user, email);
+    let event = EventAdapter;
+    let service = Service::new(user, event);
     let output = service
-        .sign_up(EmailAddress::fake(), Password::fake(), UserName::fake())
+        .sign_up(
+            EmailAddress::fake(),
+            Password::fake(),
+            UserName::fake(),
+            chrono::Utc::now().naive_utc(),
+        )
         .await;
 
     assert_matches!(output, Ok(()));
@@ -51,25 +61,34 @@ async fn succeed() {
 #[tokio::test]
 async fn already_taken() {
     struct UserAdapter;
-    struct EmailAdapter;
+    struct EventAdapter;
 
     #[async_trait]
     impl UserRepository for UserAdapter {
-        async fn exists_by_email_address(&self, _email_address: &EmailAddress) -> bool {
-            true
+        async fn exists_by_email_address(
+            &self,
+            _email_address: &EmailAddress,
+            _now: chrono::NaiveDateTime,
+        ) -> Result<bool, UseCaseError> {
+            Ok(true)
         }
     }
 
     #[async_trait]
-    impl EmailRepository for EmailAdapter {
+    impl EventRepository for EventAdapter {
         //
     }
 
     let user = UserAdapter;
-    let email = EmailAdapter;
-    let service = Service::new(user, email);
+    let event = EventAdapter;
+    let service = Service::new(user, event);
     let output = service
-        .sign_up(EmailAddress::fake(), Password::fake(), UserName::fake())
+        .sign_up(
+            EmailAddress::fake(),
+            Password::fake(),
+            UserName::fake(),
+            chrono::Utc::now().naive_utc(),
+        )
         .await;
 
     assert_matches!(output, Err(UseCaseError::AlreadyTaken));

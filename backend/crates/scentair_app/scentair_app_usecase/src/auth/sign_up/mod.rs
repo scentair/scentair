@@ -11,16 +11,26 @@ pub trait UseCase {
         email_address: EmailAddress,
         password: Password,
         name: UserName,
+        now: chrono::NaiveDateTime,
     ) -> Result<(), UseCaseError>;
 }
 
 #[async_trait]
 pub trait UserRepository: Sync {
-    async fn exists_by_email_address(&self, email_address: &EmailAddress) -> bool {
+    async fn exists_by_email_address(
+        &self,
+        email_address: &EmailAddress,
+        now: chrono::NaiveDateTime,
+    ) -> Result<bool, UseCaseError> {
         std::unimplemented!();
     }
 
-    async fn create(&self, password: &Password, name: &UserName) -> Result<UserId, UseCaseError> {
+    async fn create(
+        &self,
+        password: &Password,
+        name: &UserName,
+        now: chrono::NaiveDateTime,
+    ) -> Result<UserId, UseCaseError> {
         std::unimplemented!();
     }
 
@@ -30,7 +40,7 @@ pub trait UserRepository: Sync {
 }
 
 #[async_trait]
-pub trait EmailRepository: Sync {
+pub trait EventRepository: Sync {
     async fn send(
         &self,
         to: EmailAddress,
@@ -46,32 +56,37 @@ pub enum UseCaseError {
     Internal(anyhow::Error),
 }
 
-pub struct Service<User: UserRepository, Email: EmailRepository> {
+pub struct Service<User: UserRepository, Event: EventRepository> {
     user: User,
-    email: Email,
+    event: Event,
 }
 
-impl<User: UserRepository, Email: EmailRepository> Service<User, Email> {
-    pub const fn new(user: User, email: Email) -> Self {
-        Self { user, email }
+impl<User: UserRepository, Event: EventRepository> Service<User, Event> {
+    pub const fn new(user: User, event: Event) -> Self {
+        Self { user, event }
     }
 }
 
 #[async_trait]
-impl<User: UserRepository, Email: EmailRepository> UseCase for Service<User, Email> {
+impl<User: UserRepository, Event: EventRepository> UseCase for Service<User, Event> {
     async fn sign_up(
         &self,
         email_address: EmailAddress,
         password: Password,
         name: UserName,
+        now: chrono::NaiveDateTime,
     ) -> Result<(), UseCaseError> {
-        if self.user.exists_by_email_address(&email_address).await {
+        if self
+            .user
+            .exists_by_email_address(&email_address, now)
+            .await?
+        {
             return Err(UseCaseError::AlreadyTaken);
         }
 
-        let user_id = self.user.create(&password, &name).await?;
+        let user_id = self.user.create(&password, &name, now).await?;
         let verification_token = self.user.add_verification(user_id).await?;
-        self.email.send(email_address, &verification_token).await?;
+        self.event.send(email_address, &verification_token).await?;
 
         Ok(())
     }

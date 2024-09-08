@@ -33,7 +33,7 @@ pub trait UserRepository: Sync {
 }
 
 #[async_trait]
-pub trait EmailRepository: Sync {
+pub trait EventRepository: Sync {
     async fn send(&self, to: &EmailAddress, name: &UserName) -> Result<(), UseCaseError> {
         std::unimplemented!()
     }
@@ -52,19 +52,19 @@ pub struct UserEntity {
     pub email_address: EmailAddress,
 }
 
-pub struct Service<User: UserRepository, Email: EmailRepository> {
+pub struct Service<User: UserRepository, Event: EventRepository> {
     user: User,
-    email: Email,
+    event: Event,
 }
 
-impl<User: UserRepository, Email: EmailRepository> Service<User, Email> {
-    pub const fn new(user: User, email: Email) -> Self {
-        Self { user, email }
+impl<User: UserRepository, Event: EventRepository> Service<User, Event> {
+    pub const fn new(user: User, event: Event) -> Self {
+        Self { user, event }
     }
 }
 
 #[async_trait]
-impl<User: UserRepository, Email: EmailRepository> UseCase for Service<User, Email> {
+impl<User: UserRepository, Event: EventRepository> UseCase for Service<User, Event> {
     async fn accept_sign_up_token(&self, token: VerificationToken) -> Result<(), UseCaseError> {
         let user_verification_id = self.user.find_by_verification_token(&token).await?;
         self.user.verify_sign_up_token(user_verification_id).await?;
@@ -73,7 +73,7 @@ impl<User: UserRepository, Email: EmailRepository> UseCase for Service<User, Ema
             .user
             .find_by_user_verification_id(user_verification_id)
             .await?;
-        self.email.send(&user.email_address, &user.name).await?;
+        self.event.send(&user.email_address, &user.name).await?;
 
         Ok(())
     }

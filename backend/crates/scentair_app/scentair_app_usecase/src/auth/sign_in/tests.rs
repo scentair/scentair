@@ -4,7 +4,7 @@ use super::*;
 async fn succeed() {
     struct UserAdapter;
     struct SessionAdapter;
-    struct EmailAdapter;
+    struct EventAdapter;
 
     #[async_trait]
     impl UserRepository for UserAdapter {
@@ -28,7 +28,7 @@ async fn succeed() {
     }
 
     #[async_trait]
-    impl EmailRepository for EmailAdapter {
+    impl EventRepository for EventAdapter {
         async fn send(&self, _to: EmailAddress, _name: &UserName) -> Result<(), UseCaseError> {
             Ok(())
         }
@@ -36,8 +36,8 @@ async fn succeed() {
 
     let user = UserAdapter;
     let session = SessionAdapter;
-    let email = EmailAdapter;
-    let service = Service::new(user, session, email);
+    let event = EventAdapter;
+    let service = Service::new(user, session, event);
     let output = service
         .sign_in(EmailAddress::fake(), "password".to_owned())
         .await;
@@ -49,7 +49,7 @@ async fn succeed() {
 async fn unknown_email_address() {
     struct UserAdapter;
     struct SessionAdapter;
-    struct EmailAdapter;
+    struct EventAdapter;
 
     #[async_trait]
     impl UserRepository for UserAdapter {
@@ -67,14 +67,14 @@ async fn unknown_email_address() {
     }
 
     #[async_trait]
-    impl EmailRepository for EmailAdapter {
+    impl EventRepository for EventAdapter {
         //
     }
 
     let user = UserAdapter;
     let session = SessionAdapter;
-    let email = EmailAdapter;
-    let service = Service::new(user, session, email);
+    let event = EventAdapter;
+    let service = Service::new(user, session, event);
     let output = service
         .sign_in(EmailAddress::fake(), "password".to_owned())
         .await;

@@ -3,7 +3,7 @@ use super::*;
 #[tokio::test]
 async fn succeed() {
     struct UserAdapter;
-    struct EmailAdapter;
+    struct EventAdapter;
 
     #[async_trait]
     impl UserRepository for UserAdapter {
@@ -33,15 +33,15 @@ async fn succeed() {
     }
 
     #[async_trait]
-    impl EmailRepository for EmailAdapter {
+    impl EventRepository for EventAdapter {
         async fn send(&self, _to: &EmailAddress, _name: &UserName) -> Result<(), UseCaseError> {
             Ok(())
         }
     }
 
     let user = UserAdapter;
-    let email = EmailAdapter;
-    let service = Service::new(user, email);
+    let event = EventAdapter;
+    let service = Service::new(user, event);
     let output = service.accept_sign_up_token(VerificationToken::new()).await;
 
     assert!(output.is_ok());
@@ -50,7 +50,7 @@ async fn succeed() {
 #[tokio::test]
 async fn invalid_token() {
     struct UserAdapter;
-    struct EmailAdapter;
+    struct EventAdapter;
 
     #[async_trait]
     impl UserRepository for UserAdapter {
@@ -63,13 +63,13 @@ async fn invalid_token() {
     }
 
     #[async_trait]
-    impl EmailRepository for EmailAdapter {
+    impl EventRepository for EventAdapter {
         //
     }
 
     let user = UserAdapter;
-    let email = EmailAdapter;
-    let service = Service::new(user, email);
+    let event = EventAdapter;
+    let service = Service::new(user, event);
     let output = service.accept_sign_up_token(VerificationToken::new()).await;
 
     assert_matches!(output, Err(UseCaseError::InvalidToken));

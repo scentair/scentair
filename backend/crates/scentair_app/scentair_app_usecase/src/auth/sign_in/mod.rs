@@ -31,7 +31,7 @@ pub trait SessionRepository: Sync {
 }
 
 #[async_trait]
-pub trait EmailRepository: Sync {
+pub trait EventRepository: Sync {
     async fn send(&self, to: EmailAddress, name: &UserName) -> Result<(), UseCaseError> {
         std::unimplemented!();
     }
@@ -44,10 +44,10 @@ pub enum UseCaseError {
     Internal(anyhow::Error),
 }
 
-pub struct Service<User: UserRepository, Session: SessionRepository, Email: EmailRepository> {
+pub struct Service<User: UserRepository, Session: SessionRepository, Event: EventRepository> {
     user: User,
     session: Session,
-    email: Email,
+    event: Event,
 }
 
 pub struct UserEntity {
@@ -56,21 +56,21 @@ pub struct UserEntity {
     password: Password,
 }
 
-impl<User: UserRepository, Session: SessionRepository, Email: EmailRepository>
-    Service<User, Session, Email>
+impl<User: UserRepository, Session: SessionRepository, Event: EventRepository>
+    Service<User, Session, Event>
 {
-    pub const fn new(user: User, session: Session, email: Email) -> Self {
+    pub const fn new(user: User, session: Session, event: Event) -> Self {
         Self {
             user,
             session,
-            email,
+            event,
         }
     }
 }
 
 #[async_trait]
-impl<User: UserRepository, Session: SessionRepository, Email: EmailRepository> UseCase
-    for Service<User, Session, Email>
+impl<User: UserRepository, Session: SessionRepository, Event: EventRepository> UseCase
+    for Service<User, Session, Event>
 {
     async fn sign_in(
         &self,
@@ -82,7 +82,7 @@ impl<User: UserRepository, Session: SessionRepository, Email: EmailRepository> U
             .verify(&password)
             .map_err(UseCaseError::Password)?;
         let session_token = self.session.create(user.user_id).await?;
-        self.email.send(email_address, &user.name).await?;
+        self.event.send(email_address, &user.name).await?;
 
         Ok(session_token)
     }
